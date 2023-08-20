@@ -28,7 +28,7 @@
     <hr />
     @if (ViewBag.MostrarPartial != null && ViewBag.MostrarPartial)
     {
-        <partial name="_DadosEndereco" />
+        @await Html.PartialAsync("_DadosEndereco", Model)
     }
 </div>
 
@@ -37,7 +37,7 @@
         var cepInput = document.getElementById("cepInput");
 
         cepInput.addEventListener("input", function () {
-            var value = this.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            var value = this.value.replace(/\D/g, '');
             var formattedValue = '';
 
             if (value.length > 5) {

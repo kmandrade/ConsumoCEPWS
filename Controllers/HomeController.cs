@@ -23,8 +23,15 @@ namespace ConsumoCEPWS.Controllers
             if (ModelState.IsValid)
             {
                 string cep = model.CEP.Replace("-", "");
-
+                CepViewModel novoModel = new CepViewModel()
+                {
+                    Cidade = "Aracaju",
+                    Rua = "Estrela do Oriente",
+                    Estado = "Sergipe",
+                    Bairro = "Coqueiral"
+                };
                 ViewBag.MostrarPartial = true;
+                return View("Index",novoModel);
             }
             return View("Index");
         }
