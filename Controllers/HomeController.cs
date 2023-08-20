@@ -18,13 +18,15 @@ namespace ConsumoCEPWS.Controllers
         {
             return View();
         }
-
-        
         public async Task<ActionResult> BuscarEndereco(CepViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                string cep = model.CEP.Replace("-", "");
+
+                ViewBag.MostrarPartial = true;
+            }
+            return View("Index");
         }
-
-
     }
 }

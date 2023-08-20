@@ -10,12 +10,11 @@
 
 <form action="/Home/BuscarEndereco">
     <hr />
-    <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
         <label asp-for="CEP" class="col-md-2 control-label custom-label">CEP</label>
         <div class="col-md-10">
-            <input asp-for="CEP" class="form-control custom-form-CEP" name="cep" />
+            <input asp-for="CEP" class="form-control custom-form-CEP" id="cepInput" name="cep" />
             <span asp-validation-for="CEP" class="text-danger"></span>
         </div>
     </div>
@@ -25,5 +24,30 @@
         </div>
     </div>
 </form>
+<div class="container">
+    <hr />
+    @if (ViewBag.MostrarPartial != null && ViewBag.MostrarPartial)
+    {
+        <partial name="_DadosEndereco" />
+    }
+</div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var cepInput = document.getElementById("cepInput");
 
+        cepInput.addEventListener("input", function () {
+            var value = this.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            var formattedValue = '';
+
+            if (value.length > 5) {
+                formattedValue += value.substr(0, 5) + '-';
+                formattedValue += value.substr(5, 3);
+            } else {
+                formattedValue = value;
+            }
+
+            this.value = formattedValue;
+        });
+    });
+</script>

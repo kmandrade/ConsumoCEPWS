@@ -8,11 +8,10 @@ namespace ConsumoCEPWS.Models
         public int NumeroCasa { get; set; }
 
         [Required(ErrorMessage = "O campo CEP é obrigatório.")]
-        [DisplayFormat(DataFormatString = "{0:#####-###}")]
         [MaxLength(9)]
-        public string CEP { get; set; }
+        public string? CEP { get; set; }
         public string? Complemento { get; set; }
-        public string Cidade { get; set; }
+        public string? Cidade { get; set; }
 
     }
 }
