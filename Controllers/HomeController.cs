@@ -1,5 +1,6 @@
 ﻿using ConsumoCEPWS.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace ConsumoCEPWS.Controllers
@@ -18,15 +19,12 @@ namespace ConsumoCEPWS.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        
+        public async Task<ActionResult> BuscarEndereco(CepViewModel model)
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+
     }
 }

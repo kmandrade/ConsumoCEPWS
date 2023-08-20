@@ -5,5 +5,25 @@
 
 <div class="text-center">
     <h1>Consumo CEP</h1>
-    <p>Digite o número CEP para encontrar detalhes do endereço.</p>
+    <p>Digite o número do CEP para encontrar detalhes do endereço.</p>
 </div>
+
+<form action="/Home/BuscarEndereco">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="CEP" class="col-md-2 control-label custom-label">CEP</label>
+        <div class="col-md-10">
+            <input asp-for="CEP" class="form-control custom-form-CEP" name="cep" />
+            <span asp-validation-for="CEP" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Buscar" class="btn btn-success" />
+        </div>
+    </div>
+</form>
+
+
