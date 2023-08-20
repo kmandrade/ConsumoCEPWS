@@ -16,8 +16,13 @@ html {
 body {
   margin-bottom: 60px;
 }
-.imgs-logo {
-    width: 150px;
+.csharp-logo {
+    width: 130px;
     height: 100px;
     margin-right: 10px; 
+}
+.correios-logo {
+    width: 100%;
+    height: 100px;
+    margin-right: 10px;
 }
