@@ -26,30 +26,37 @@ namespace ConsumoCEPWS.Controllers
         {
             string cacheKey = "Endereco";
             EnderecoViewModel Endereco;
-            if (ModelState.IsValid && !_cache.TryGetValue(cacheKey, out Endereco))
+            if (ModelState.IsValid)
             {
-                ViewBag.MostrarPartial = true;
-                string cep = model.CEP.Replace("-", "");
-                Endereco = await ObterDadosEndereco(cep);
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromSeconds(160));
-                _cache.Set(cacheKey, Endereco, cacheOptions);
-                return View("Index", Endereco);
-            }
-            else if (ModelState.IsValid)
-            {
-                var EnderecoModel = await _cache.GetOrCreateAsync<EnderecoViewModel>(cacheKey, async entry =>
+                if (!_cache.TryGetValue(cacheKey, out Endereco))
                 {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(10);
-                    entry.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(30);
+                    ViewBag.MostrarPartial = true;
                     string cep = model.CEP.Replace("-", "");
-                    return await ObterDadosEndereco(cep);
-                });
-                ViewBag.MostrarPartial = (EnderecoModel != null);
-                return View("Index", EnderecoModel);
+                    Endereco = await ObterDadosEndereco(cep);
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(160));
+                    _cache.Set(cacheKey, Endereco, cacheOptions);
+                    return View("Index", Endereco);
+                }
+                else
+                {
+                    var EnderecoModel = await _cache.GetOrCreateAsync<EnderecoViewModel>(cacheKey, async entry =>
+                    {
+                        entry.SlidingExpiration = TimeSpan.FromSeconds(10);
+                        entry.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(30);
+                        string cep = model.CEP.Replace("-", "");
+                        return await ObterDadosEndereco(cep);
+                    });
+                    ViewBag.MostrarPartial = (EnderecoModel != null);
+                    return View("Index", EnderecoModel);
+                }
             }
-            _logger.LogError("Endereco não encontrado.");
-            return View("Index");
+            else
+            {
+                TempData["ErrorMessage"] = "Endereço não encontrado.";
+                _logger.LogError("Endereco não encontrado.");
+                return View("Index");
+            }
 
         }
         private async Task<EnderecoViewModel> ObterDadosEndereco(string cep)
