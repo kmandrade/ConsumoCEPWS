@@ -3,15 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using Correios;
+using Microsoft.Extensions.Caching.Memory;
+
 namespace ConsumoCEPWS.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMemoryCache _cache;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMemoryCache cache)
         {
             _logger = logger;
+            _cache = cache;
         }
 
         public IActionResult Index()
@@ -20,15 +24,33 @@ namespace ConsumoCEPWS.Controllers
         }
         public async Task<ActionResult> BuscarEndereco(EnderecoViewModel model)
         {
-            if (ModelState.IsValid)
+            string cacheKey = "Endereco";
+            EnderecoViewModel Endereco;
+            if (ModelState.IsValid && !_cache.TryGetValue(cacheKey, out Endereco))
             {
-                string cep = model.CEP.Replace("-", "");
-                model = await ObterDadosEndereco(cep);
                 ViewBag.MostrarPartial = true;
-                return View("Index", model);
+                string cep = model.CEP.Replace("-", "");
+                Endereco = await ObterDadosEndereco(cep);
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(160));
+                _cache.Set(cacheKey, Endereco, cacheOptions);
+                return View("Index", Endereco);
+            }
+            else if (ModelState.IsValid)
+            {
+                var EnderecoModel = await _cache.GetOrCreateAsync<EnderecoViewModel>(cacheKey, async entry =>
+                {
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(10);
+                    entry.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(30);
+                    string cep = model.CEP.Replace("-", "");
+                    return await ObterDadosEndereco(cep);
+                });
+                ViewBag.MostrarPartial = (EnderecoModel != null);
+                return View("Index", EnderecoModel);
             }
             _logger.LogError("Endereco não encontrado.");
             return View("Index");
+
         }
         private async Task<EnderecoViewModel> ObterDadosEndereco(string cep)
         {
