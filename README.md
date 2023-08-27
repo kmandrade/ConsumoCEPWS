@@ -1,8 +1,7 @@
 # ConsumoCEPWS
 
-Tutorial para consumo de WebServices.
-
-WebService dos Correios para obter informações do endereço cujo o CEP for informado.
+<h1>Consumo de Serviço WCF e Web Service para Detalhes de Endereço com Cache em Memória</h1>
+Este projeto é uma demonstração de como consumir um serviço WCF (Windows Communication Foundation) e um Web Service para obter detalhes de endereço usando a API dos Correios. A implementação utiliza a arquitetura Model-View-Controller (MVC) para criar uma aplicação web que facilita a busca de informações de endereço a partir de um CEP fornecido pelo usuário.
 
 Para conseguir acessar as classes do serviço em questão é necessário adicionar o link do serviço ao seu projeto, conforme as imagens a baixo:
 <div style="display: flex; justify-content: space-between;">
