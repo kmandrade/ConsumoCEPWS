@@ -17,3 +17,5 @@ nesse exemplo foi usado para buscar detalhes do endereço a partir de um CEP:
 ```
 Para mais detalhes conferir neste projeto como foi feita a implementação.
 Foi utilizado também o uso de chace em memória para melhorar o tempo de resposta, especialmente em consultas de CEPs idênticos.
+
+Link do serviço: https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente?wsdl
